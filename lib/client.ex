@@ -126,18 +126,16 @@ defmodule Mailgun.Client do
     end
   end
   defp do_subscribe_email_list(_, conf, emaillist, email) do
-    attrs = %{ address: email }
+    attrs = %{ members: [email] }
     ctype   = 'application/x-www-form-urlencoded'
     body    = URI.encode_query(attrs)
-    IO.inspect [conf, :post, url("/lists/#{emaillist}/members", conf[:domain]), "api", conf[:key], [], ctype, body]
-    request(conf, :post, url("/lists/#{emaillist}/members", conf[:domain]), "api", conf[:key], [], ctype, body)
+    request(conf, :put, url("/lists/#{emaillist}/members.json", conf[:domain]), "api", conf[:key], [], ctype, body)
   end
   defp do_unsubscribe_email_list(_, conf, emaillist, email) do
-    attrs = %{ }
+    attrs = %{ address: email, subscribed: "no" }
     ctype   = 'application/x-www-form-urlencoded'
     body    = URI.encode_query(attrs)
-
-    request(conf, :del, url("/lists/#{emaillist}/members/#{email}", conf[:domain]), "api", conf[:key], [], ctype, body)
+    request(conf, :put, url("/lists/#{emaillist}/members/#{email}", conf[:domain]), "api", conf[:key], [], ctype, body)
   end
 
   defp send_without_attachments(conf, email) do
