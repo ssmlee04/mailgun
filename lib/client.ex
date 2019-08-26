@@ -238,6 +238,7 @@ defmodule Mailgun.Client do
   end
 
   defp normalize_response(response) do
+    IO.inspect response
     case response do
       {:ok, {{_httpvs, 200, _status_phrase}, json_body}} ->
         {:ok, json_body}
