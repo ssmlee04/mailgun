@@ -129,6 +129,7 @@ defmodule Mailgun.Client do
     attrs = %{ address: email }
     ctype   = 'application/x-www-form-urlencoded'
     body    = URI.encode_query(attrs)
+    IO.inspect [conf, :post, url("/lists/#{emaillist}/members", conf[:domain]), "api", conf[:key], [], ctype, body]
     request(conf, :post, url("/lists/#{emaillist}/members", conf[:domain]), "api", conf[:key], [], ctype, body)
   end
   defp do_unsubscribe_email_list(_, conf, emaillist, email) do
