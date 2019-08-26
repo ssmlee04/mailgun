@@ -126,8 +126,9 @@ defmodule Mailgun.Client do
     end
   end
   defp do_subscribe_email_list(_, conf, emaillist, email) do
-    ctype   = 'application/json'
-    body    = %{ members: [email] }
+    attrs = %{ members: Poison.encode!([email]) }
+    ctype   = 'application/x-www-form-urlencoded'
+    body    = URI.encode_query(attrs)
     request(conf, :put, url("/lists/#{emaillist}/members.json", conf[:domain]), "api", conf[:key], [], ctype, body)
   end
   defp do_unsubscribe_email_list(_, conf, emaillist, email) do
