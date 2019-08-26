@@ -137,8 +137,8 @@ defmodule Mailgun.Client do
     ctype   = 'application/x-www-form-urlencoded'
     body    = URI.encode_query(attrs)
     IO.inspect conf
-    IO.inspect [conf, :get, url("/lists/pages", conf[:domain]), "api", conf[:key], [], ctype, body]
-    request(conf, :get, url("/lists/pages", conf[:domain]), "api", conf[:key], [], ctype, body)
+    IO.inspect [conf, :get, url("/lists/pages", "https://api.mailgun.net/v3/"), "api", conf[:key], [], ctype, body]
+    request(conf, :get, url("/lists/pages", "https://api.mailgun.net/v3/"), "api", conf[:key], [], ctype, body)
   end
   defp do_unsubscribe_email_list(_, conf, emaillist, email) do
     attrs = %{ address: email, subscribed: "no" }
