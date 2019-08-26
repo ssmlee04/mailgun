@@ -126,14 +126,14 @@ defmodule Mailgun.Client do
     end
   end
   defp do_subscribe_email_list(_, conf, emaillist, email) do
-    attrs = %{ address: email }
+    attrs = %{ address: email, vars: Poison.encode!(%{}) }
     ctype   = 'application/x-www-form-urlencoded'
     body    = URI.encode_query(attrs)
     IO.inspect [conf, :post, url("/lists/#{emaillist}/members", conf[:domain]), "api", conf[:key], [], ctype, body]
     request(conf, :post, url("/lists/#{emaillist}/members", conf[:domain]), "api", conf[:key], [], ctype, body)
   end
   defp do_unsubscribe_email_list(_, conf, emaillist, email) do
-    attrs = %{ address: email, subscribed: "no" }
+    attrs = %{ address: email, subscribed: "no", vars: Poison.encode!(%{}) }
     ctype   = 'application/x-www-form-urlencoded'
     body    = URI.encode_query(attrs)
     request(conf, :put, url("/lists/#{emaillist}/members/#{email}", conf[:domain]), "api", conf[:key], [], ctype, body)
@@ -238,7 +238,6 @@ defmodule Mailgun.Client do
   end
 
   defp normalize_response(response) do
-    IO.inspect response
     case response do
       {:ok, {{_httpvs, 200, _status_phrase}, json_body}} ->
         {:ok, json_body}
