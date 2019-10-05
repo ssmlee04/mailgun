@@ -89,8 +89,8 @@ defmodule Mailgun.Client do
         unquote(__MODULE__).send_email(conf(), email)
       end
 
-      def subscribe_email_list(emaillist, email) do
-        unquote(__MODULE__).subscribe_email_list(conf(), emaillist, email)
+      def subscribe_email_list(emaillist, email, info \\ "") do
+        unquote(__MODULE__).subscribe_email_list(conf(), emaillist, email, info)
       end
 
       def unsubscribe_email_list(emaillist, email) do
@@ -107,8 +107,8 @@ defmodule Mailgun.Client do
   def send_email(conf, email) do
     do_send_email(conf[:mode], conf, email)
   end
-  def subscribe_email_list(conf, emaillist, email) do
-    do_subscribe_email_list(conf[:mode], conf, emaillist, email)
+  def subscribe_email_list(conf, emaillist, email, info) do
+    do_subscribe_email_list(conf[:mode], conf, emaillist, email, info)
   end
   def unsubscribe_email_list(conf, emaillist, email) do
     do_unsubscribe_email_list(conf[:mode], conf, emaillist, email)
@@ -125,8 +125,8 @@ defmodule Mailgun.Client do
         send_with_attachments(conf, Dict.delete(email, :attachments), atts)
     end
   end
-  defp do_subscribe_email_list(_, conf, emaillist, email) do
-    attrs = %{ address: email }
+  defp do_subscribe_email_list(_, conf, emaillist, email, info) do
+    attrs = %{ address: email, vars: info }
     ctype   = 'application/x-www-form-urlencoded'
     body    = URI.encode_query(attrs)
     request(conf, :post, url("/lists/#{emaillist}/members", conf[:domain_base]), "api", conf[:key], [], ctype, body)
